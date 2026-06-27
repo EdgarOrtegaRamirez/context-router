@@ -5,16 +5,28 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 
-from context_router.analyzer import PromptAnalyzer
-from context_router.config import RouterConfig
+from context_router.analyzer import PromptAnalyzer as PromptAnalyzer
+from context_router.config import RouterConfig as RouterConfig
 from context_router.models import (
-    PromptAnalysis,
-    ProviderConfig,
-    ProviderType,
-    Quality,
-    RouterResult,
-    RoutingStrategy,
-    Speed,
+    PromptAnalysis as PromptAnalysis,
+)
+from context_router.models import (
+    ProviderConfig as ProviderConfig,
+)
+from context_router.models import (
+    ProviderType as ProviderType,
+)
+from context_router.models import (
+    Quality as Quality,
+)
+from context_router.models import (
+    RouterResult as RouterResult,
+)
+from context_router.models import (
+    RoutingStrategy as RoutingStrategy,
+)
+from context_router.models import (
+    Speed as Speed,
 )
 
 logger = logging.getLogger(__name__)
@@ -69,7 +81,7 @@ class BaseRouterStrategy(ABC):
         if not scores:
             raise ValueError("No providers scored successfully")
 
-        best_name = max(scores, key=scores.get)
+        best_name = max(scores, key=lambda k: scores[k])
         best_score = scores[best_name]
         best_provider = providers[best_name]
 
@@ -250,10 +262,7 @@ class HybridRouter(BaseRouterStrategy):
             else:
                 quality_score = 0.2
         else:
-            if provider.quality in (Quality.MEDIUM, Quality.HIGH):
-                quality_score = 0.8
-            else:
-                quality_score = 0.5
+            quality_score = 0.8 if provider.quality in (Quality.MEDIUM, Quality.HIGH) else 0.5
         score += quality_score * 0.4
 
         # Cost efficiency (30% weight)
@@ -280,10 +289,7 @@ class HybridRouter(BaseRouterStrategy):
             else:
                 speed_score = 0.2
         elif analysis.urgency == "batch":
-            if provider.quality == Quality.HIGH:
-                speed_score = 0.8
-            else:
-                speed_score = 0.6
+            speed_score = 0.8 if provider.quality == Quality.HIGH else 0.6
         else:
             speed_score = 0.5
         score += speed_score * 0.2

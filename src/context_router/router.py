@@ -2,20 +2,19 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
-from datetime import datetime, timezone
+from typing import Any
 
 from context_router.analyzer import PromptAnalyzer
 from context_router.config import RouterConfig, load_config
 from context_router.models import (
     PromptAnalysis,
     ProviderConfig,
-    ProviderType,
     RouterResult,
     RoutingStats,
+    RoutingStrategy,
 )
-from context_router.providers import ProviderError, get_adapter
+from context_router.providers import get_adapter
 from context_router.strategies import get_strategy
 
 logger = logging.getLogger(__name__)
@@ -42,7 +41,7 @@ class Router:
         )
 
     @property
-    def strategy(self):
+    def strategy(self) -> RoutingStrategy:
         """Get the current routing strategy."""
         return self.config.routing_strategy
 
@@ -70,7 +69,7 @@ class Router:
         prompt: str,
         system_prompt: str | None = None,
         provider_name: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> RouterResult:
         """Route a prompt to the best provider.
 
@@ -150,7 +149,7 @@ class Router:
         provider: ProviderConfig,
         prompt: str,
         system_prompt: str | None,
-        **kwargs,
+        **kwargs: Any,
     ) -> str:
         """Send a request to a specific provider.
 

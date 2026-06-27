@@ -65,7 +65,7 @@ def load_config(config_path: str | Path | None = None) -> RouterConfig:
         logger.warning("Config file not found at %s, using defaults", path)
         return RouterConfig()
 
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         raw = yaml.safe_load(f)
 
     if not isinstance(raw, dict):

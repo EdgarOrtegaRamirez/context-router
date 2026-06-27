@@ -25,15 +25,24 @@ COMPLEXITY_PATTERNS: dict[str, Any] = {
         "weight": 0.1,
     },
     "code_related": {
-        "pattern": r"(?:function|class|method|api|endpoint|database|query|algorithm|data\s*structure)",
+        "pattern": (
+            r"(?:function|class|method|api|endpoint|"
+            r"database|query|algorithm|data\s*structure)"
+        ),
         "weight": 0.2,
     },
     "math": {
-        "pattern": r"(?:calculate|compute|solve|equation|integral|derivative|probability|statistic)",
+        "pattern": (
+            r"(?:calculate|compute|solve|equation|integral|"
+            r"derivative|probability|statistic)"
+        ),
         "weight": 0.15,
     },
     "creative": {
-        "pattern": r"(?:write\s+(?:a\s+)?(?:story|poem|song|script|essay|article|blog|post|email|letter))",
+        "pattern": (
+            r"(?:write\s+(?:a\s+)?(?:story|poem|song|script|"
+            r"essay|article|blog|post|email|letter))"
+        ),
         "weight": 0.05,
     },
     "long_context": {
@@ -84,7 +93,7 @@ class PromptAnalyzer:
     """Analyzes prompts to determine complexity, type, and other features."""
 
     def __init__(self) -> None:
-        self._compiled_patterns: dict[str, re.Pattern] = {}
+        self._compiled_patterns: dict[str, re.Pattern[str]] = {}
         for name, config in COMPLEXITY_PATTERNS.items():
             self._compiled_patterns[f"complexity_{name}"] = re.compile(
                 config["pattern"], re.IGNORECASE
@@ -174,11 +183,11 @@ class PromptAnalyzer:
             return "general"
 
         # Return the type with highest score
-        return max(scores, key=scores.get)
+        return max(scores, key=lambda k: scores[k])
 
     def _estimate_tokens(self, prompt: str) -> int:
         """Estimate token count for the prompt.
-        
+
         Approximate: ~4 chars per token for English text.
         """
         return max(1, len(prompt) // 4)

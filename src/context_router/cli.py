@@ -6,7 +6,6 @@ import asyncio
 import json
 import logging
 import sys
-from pathlib import Path
 
 import click
 from rich.console import Console
@@ -14,7 +13,7 @@ from rich.panel import Panel
 from rich.table import Table
 
 from context_router.config import RouterConfig, load_config, save_config
-from context_router.models import RoutingStrategy
+from context_router.models import PromptAnalysis, RouterResult, RoutingStats, RoutingStrategy
 from context_router.router import Router
 
 console = Console()
@@ -218,7 +217,7 @@ def reset(ctx: click.Context, reset: bool) -> None:
         console.print("[green]Routing statistics reset.[/green]")
 
 
-def _print_route_result(result) -> None:
+def _print_route_result(result: RouterResult) -> None:
     """Print a routing result in a nice format."""
     console.print(Panel(
         f"[bold]{result.provider_name}[/bold] ({result.model})\n\n"
@@ -235,7 +234,7 @@ def _print_route_result(result) -> None:
         console.print(Panel(result.response, title="Response", border_style="blue"))
 
 
-def _print_analysis(analysis) -> None:
+def _print_analysis(analysis: PromptAnalysis) -> None:
     """Print a prompt analysis."""
     table = Table(title="Prompt Analysis")
     table.add_column("Metric", style="cyan")
@@ -252,7 +251,7 @@ def _print_analysis(analysis) -> None:
     console.print(table)
 
 
-def _print_stats(stats) -> None:
+def _print_stats(stats: RoutingStats) -> None:
     """Print routing statistics."""
     table = Table(title="Routing Statistics")
     table.add_column("Metric", style="cyan")

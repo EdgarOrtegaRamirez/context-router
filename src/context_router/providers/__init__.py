@@ -86,8 +86,8 @@ class OpenAIAdapter(BaseProviderAdapter):
             async with httpx.AsyncClient(timeout=config.timeout) as client:
                 response = await client.post(url, json=payload, headers=headers)
                 response.raise_for_status()
-                data = response.json()
-                return data["choices"][0]["message"]["content"]
+                data: dict[str, Any] = response.json()
+                return str(data["choices"][0]["message"]["content"])
         except httpx.HTTPStatusError as e:
             raise ProviderError(
                 f"HTTP {e.response.status_code}: {e.response.text}",
@@ -148,8 +148,8 @@ class AnthropicAdapter(BaseProviderAdapter):
             async with httpx.AsyncClient(timeout=config.timeout) as client:
                 response = await client.post(url, json=payload, headers=headers)
                 response.raise_for_status()
-                data = response.json()
-                return data["content"][0]["text"]
+                data: dict[str, Any] = response.json()
+                return str(data["content"][0]["text"])
         except httpx.HTTPStatusError as e:
             raise ProviderError(
                 f"HTTP {e.response.status_code}: {e.response.text}",
@@ -200,8 +200,8 @@ class LocalAdapter(BaseProviderAdapter):
             async with httpx.AsyncClient(timeout=config.timeout) as client:
                 response = await client.post(url, json=payload, headers=headers)
                 response.raise_for_status()
-                data = response.json()
-                return data["choices"][0]["message"]["content"]
+                data: dict[str, Any] = response.json()
+                return str(data["choices"][0]["message"]["content"])
         except httpx.HTTPStatusError as e:
             raise ProviderError(
                 f"HTTP {e.response.status_code}: {e.response.text}",

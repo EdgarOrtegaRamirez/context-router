@@ -46,6 +46,7 @@ dev = [
     "pytest-asyncio>=1.4.0",
     "ruff>=0.15.0",
     "mypy>=2.1.0",
+    "types-PyYAML>=6.0.12",
 ]
 
 [project.scripts]
