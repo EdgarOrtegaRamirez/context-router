@@ -3,21 +3,20 @@
 import pytest
 
 from context_router.models import (
+    PromptAnalysis,
     ProviderConfig,
     ProviderType,
-    PromptAnalysis,
     Quality,
     RoutingStrategy,
     Speed,
 )
 from context_router.strategies import (
+    STRATEGY_REGISTRY,
     CapabilityRouter,
     ComplexityRouter,
     CostRouter,
     HybridRouter,
-    BaseRouterStrategy,
     get_strategy,
-    STRATEGY_REGISTRY,
 )
 
 
@@ -166,7 +165,9 @@ class TestHybridRouter:
         router = HybridRouter()
         analysis = make_analysis()
 
-        balanced = make_provider("balanced", cost=0.00001, speed=Speed.MEDIUM, quality=Quality.MEDIUM)
+        balanced = make_provider(
+            "balanced", cost=0.00001, speed=Speed.MEDIUM, quality=Quality.MEDIUM
+        )
         score = router.score_provider(balanced, analysis)
         assert 0.0 <= score <= 1.0
 
@@ -212,7 +213,6 @@ class TestStrategyRegistry:
         assert isinstance(get_strategy(RoutingStrategy.HYBRID), HybridRouter)
 
     def test_unknown_strategy_defaults_to_hybrid(self):
-        from context_router.strategies import BaseRouterStrategy
         # Unknown strategy should default to HybridRouter
         result = get_strategy(RoutingStrategy.HYBRID)
         assert isinstance(result, HybridRouter)

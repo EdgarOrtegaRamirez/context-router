@@ -4,15 +4,15 @@ import asyncio
 
 import pytest
 
-from context_router.models import ProviderConfig, ProviderType, Quality, Speed
+from context_router.models import ProviderConfig, ProviderType
 from context_router.providers import (
+    PROVIDER_REGISTRY,
+    AnthropicAdapter,
     BaseProviderAdapter,
     LocalAdapter,
     OpenAIAdapter,
-    AnthropicAdapter,
     ProviderError,
     get_adapter,
-    PROVIDER_REGISTRY,
 )
 
 
@@ -63,7 +63,7 @@ class TestOpenAIAdapter:
             model="gpt-4",
             base_url="http://localhost:19999/v1",
         )
-        with pytest.raises(Exception):  # Connection error (any exception type)
+        with pytest.raises((ProviderError, OSError, ConnectionError)):
             asyncio.run(
                 adapter.send_request(
                     config,

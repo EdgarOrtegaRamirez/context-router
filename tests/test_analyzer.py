@@ -3,7 +3,6 @@
 import pytest
 
 from context_router.analyzer import PromptAnalyzer
-from context_router.models import PromptAnalysis
 
 
 class TestPromptAnalyzer:

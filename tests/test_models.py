@@ -7,11 +7,8 @@ from context_router.models import (
     PromptAnalysis,
     ProviderConfig,
     ProviderType,
-    Quality,
     RouterResult,
     RoutingStats,
-    RoutingStrategy,
-    Speed,
 )
 
 

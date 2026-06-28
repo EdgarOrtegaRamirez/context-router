@@ -1,12 +1,12 @@
 """Tests for configuration management."""
 
-import pytest
 from pathlib import Path
 
+import pytest
 import yaml
 
 from context_router.config import RouterConfig, load_config, save_config
-from context_router.models import ProviderConfig, ProviderType, RoutingStrategy, Speed, Quality
+from context_router.models import ProviderConfig, ProviderType, Quality, RoutingStrategy, Speed
 
 
 class TestRouterConfig:
